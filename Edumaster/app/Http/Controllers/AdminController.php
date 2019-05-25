@@ -59,4 +59,102 @@ class AdminController extends Controller
     	$request->session()->flash('message','Logout Successfull');
     	return redirect()->route('admin.login');
     }
+    public function schoolList(Request $request)
+    {
+    	$admin=Admin::where('user_id',$request->session()->get('loggedAdmin'));
+    	if ($admin) {
+    		$schools=School::all();
+    		$school_id=0;
+    		foreach ($schools as $school) {
+    			$school_id=$school->id;
+
+    		}
+    		return view('Admin.schoollist')
+    				->with('school_id',$school_id)
+    				->with('schools',$schools);
+    	}
+    }
+    public function schoolForm(Request $request)
+    {
+    	$schools=School::all();
+    	return view('Admin.schoolform')
+    			->with('schools',$schools);
+    }
+    public function addSchool(Request $request)
+    {
+    	$request->validate([
+
+    		'school_code'=>'required',
+    		'school_name'=>'required',
+    		'location'=>'required',
+    		'total_student'=>'required',
+    		'school_account'=>'required',
+    		'school_account_type'=>'required',
+    		'academic_session'=>'required',
+    	]);
+    	$school=new School();
+    	$school->school_code=$request->school_code;
+    	$school->school_name=$request->school_name;
+    	$school->location=$request->location;
+    	$school->total_student=$request->total_student;
+    	$school->school_account=$request->school_account;
+    	$school->school_account_type=$request->school_account_type;
+    	$school->academic_session=$request->academic_session;
+    	$school->save();
+    	$request->session()->flash('message','Data Inserted Successfully');
+    	return back();
+    }
+    public function editSchool(Request $request,$id)
+    {
+    	$schools=School::where('id',$id)->get();
+    	return view('Admin.updateschool')
+    			->with('schools',$schools);
+    }
+    public function editSchoolAdd(request $request,$id)
+    {
+    	$school=School::find($request->id);
+    	$request->validate([
+
+    		'school_code'=>'required',
+    		'school_name'=>'required',
+    		'location'=>'required',
+    		'total_student'=>'required',
+    		'school_account'=>'required',
+    		'school_account_type'=>'required',
+    		'academic_session'=>'required',
+    	]);
+    	$school->school_code=$request->school_code;
+    	$school->school_name=$request->school_name;
+    	$school->location=$request->location;
+    	$school->total_student=$request->total_student;
+    	$school->school_account=$request->school_account;
+    	$school->school_account_type=$request->school_account_type;
+    	$school->academic_session=$request->academic_session;
+    	$school->save();
+    	$request->session()->flash('message','Data Update Successfully');
+    	return redirect()->route('admin.schoolList');
+
+    }
+    public function deleteSchool(Request $request)
+    {
+    	$delschool=$request->selected;
+    	foreach ($delschool as $del) {
+    		$schools=School::where('id',$del)->delete();
+    	}
+    	
+    	$request->session()->flash('message','Data Deleted Successfully');
+    	return redirect()->route('admin.schoolList');
+    }
+    public function searchSchool(Request $request)
+    {
+    	$admin=Admin::where('user_id',$request->session()->get('loggedAdmin'))->get();
+    	$searchname=$request->searchname;
+    	if ($admin) {
+    		$schools=School::where('school_name','like','%'.$searchname.'%')->get();
+    		return view('Admin.index')
+    				->with('schools',$schools);
+    	}else{
+    		$request->session()->flash('message','You have given a Wrong School Name');
+    	}
+    }
 }

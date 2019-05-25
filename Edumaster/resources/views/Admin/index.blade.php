@@ -15,7 +15,8 @@
         <li><a href="http://localhost:8080/edumaster/index.php?route=common/dashboard&amp;user_token=pfcUl2bkbhkNG1D1DDoBnl9KGeBKN159">Home</a></li>
         <li><a href="http://localhost:8080/edumaster/index.php?route=common/dashboard&amp;user_token=pfcUl2bkbhkNG1D1DDoBnl9KGeBKN159">Dashboard</a></li>
 	  </ul><br> -->
-      <form method="post" action="http://localhost:8080/edumaster/index.php?route=common/dashboard/searchSchool&amp;user_token=pfcUl2bkbhkNG1D1DDoBnl9KGeBKN159">
+      <form method="post" action="{{route('admin.searchSchool')}}">
+        {{csrf_field()}}
       <div class="row">
         <div class="col-md-2">
           <input type="text" name="searchname" placeholder="search school" class="form-control"></div>
@@ -26,7 +27,7 @@
   <div class="container-fluid">    
     <div class="row">
       @forelse($schools as $school)
-      <div class="col-lg-3 col-md-3 col-sm-6">
+      <div class="col-lg-4 col-md-4 col-sm-6">
         <div class="tile tile-primary">
           <div class="tile-heading">{{$school->school_name}}
             <span class="pull-right">0%</span>
@@ -40,11 +41,21 @@
       </div>
     </div>
     @empty
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-3">
+              <h3>&nbsp;&nbsp;Sorry No School found</h3>
+            </div>
+          </div>
+        </div>
+      </div>
     @endforelse
   </div>  
   @if(session('message'))
     {{session('message')}}
   @endif
 </div>
+
 @endif
 @endsection

@@ -23,7 +23,7 @@
 <script src="{{asset('js')}}/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
 <link href="{{asset('js')}}/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.css" type="text/css" rel="stylesheet" media="screen" />
 <link type="text/css" href="{{asset('css')}}/stylesheet.css" rel="stylesheet" media="screen" />
-<script src="view/javascript/common.js" type="text/javascript"></script>
+<script src="{{asset('js')}}/javascript/common.js" type="text/javascript"></script>
 </head>
 <body>
 <div id="container">
@@ -32,13 +32,13 @@
   <div class="container-fluid">
 
   
-    <div id="header-logo" class="navbar-header"><a href="http://localhost:8080/edumaster/index.php?route=common/dashboard&amp;user_token=pfcUl2bkbhkNG1D1DDoBnl9KGeBKN159" class="navbar-brand"><img src="view/image/Edumaster_resized.png" id="logoimage" alt="OpenCart" title="OpenCart" /></a></div>
+    <div id="header-logo" class="navbar-header"><a href="" class="navbar-brand"><img src="{{asset('images')}}/Edumaster_resized.png" id="logoimage" alt="OpenCart" title="OpenCart" /></a></div>
     <a href="#" id="button-menu" class="hidden-md hidden-lg"><span class="fa fa-bars"></span></a>    
     
 
     
     <ul class="nav navbar-nav navbar-right">
-      <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="http://localhost:8080/edumaster/image/cache/profile-45x45.png" alt="Hishab Super" title="hishab" id="user-profile" class="img-circle" />Hishab Super <i class="fa fa-caret-down fa-fw"></i></a>
+      <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{{asset('images')}}/profile-45x45.png" alt="Hishab Super" title="hishab" id="user-profile" class="img-circle" />Hishab Super <i class="fa fa-caret-down fa-fw"></i></a>
         <ul class="dropdown-menu dropdown-menu-right">
           <li><a href="http://localhost:8080/edumaster/index.php?route=common/profile&amp;user_token=pfcUl2bkbhkNG1D1DDoBnl9KGeBKN159"><i class="fa fa-user-circle-o fa-fw"></i> Your Profile</a></li>
           <li role="separator" class="divider"></li>
@@ -54,9 +54,15 @@
 <nav id="column-left">
   <div id="navigation"><span class="fa fa-bars"></span> Navigation</div>
     <ul id="menu">
-      <li id="menu-dashboard"><a href="http://localhost:8080/edumaster/index.php?route=common/dashboard&amp;user_token=pfcUl2bkbhkNG1D1DDoBnl9KGeBKN159"><i class="fa fa-dashboard fw"></i> Dashboard</a>        
+      <li id="menu-dashboard"><a href="{{route('admin.index')}}"><i class="fa fa-dashboard fw"></i> Dashboard</a>        
       </li>
-      <li id="menu-dashboard"><a href="#"><i class="fa fa-dashboard fw"></i> School</a>        
+      <li id="menu-dashboard"> 
+        <a href="#collapse1" data-toggle="collapse" class="parent collapsed"><i class="fa fa-cog fw"></i> School</a>
+        <ul id="collapse1" class="collapse">
+          <li>
+            <a href="{{route('admin.schoolList')}}"><i class="fa fa-dashboard fw"></i> School</a> 
+          </li>
+        </ul>       
       </li>
       <!-- <li id="menu-extension">
         <a href="#collapse1" data-toggle="collapse" class="parent collapsed"><i class="fa fa-puzzle-piece fw"></i> Extensions</a>
@@ -124,31 +130,33 @@
 @yield('container')
 
     
-<script type="text/javascript"><!--
-$('#button-setting').on('click', function() {
-	$.ajax({
-		url: 'index.php?route=common/developer&user_token=pfcUl2bkbhkNG1D1DDoBnl9KGeBKN159',
-		dataType: 'html',
-		beforeSend: function() {
-			$('#button-setting').button('loading');
-		},
-		complete: function() {
-			$('#button-setting').button('reset');
-		},
-		success: function(html) {
-			$('#modal-developer').remove();
-			
-			$('body').prepend('<div id="modal-developer" class="modal">' + html + '</div>');
-			
-			$('#modal-developer').modal('show');
-		},
-		error: function(xhr, ajaxOptions, thrownError) {
-			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-		}
-	});	
-});	
-//--></script> 
+
 </div>
 <footer id="footer"><a href="http://www.onelimitedbd.com">ONE</a> &copy; 20019-2019 All Rights Reserved.<br />Version 1.0.1.1</footer></div>
 </body>
+
+<script type="text/javascript"><!--
+$('#button-setting').on('click', function() {
+  $.ajax({
+    url: 'index.php?route=common/developer&user_token=pfcUl2bkbhkNG1D1DDoBnl9KGeBKN159',
+    dataType: 'html',
+    beforeSend: function() {
+      $('#button-setting').button('loading');
+    },
+    complete: function() {
+      $('#button-setting').button('reset');
+    },
+    success: function(html) {
+      $('#modal-developer').remove();
+      
+      $('body').prepend('<div id="modal-developer" class="modal">' + html + '</div>');
+      
+      $('#modal-developer').modal('show');
+    },
+    error: function(xhr, ajaxOptions, thrownError) {
+      alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+    }
+  }); 
+}); 
+</script> 
 </html>
