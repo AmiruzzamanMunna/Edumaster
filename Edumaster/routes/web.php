@@ -18,13 +18,11 @@ Route::get('/', function () {
 
 //Admin Part
 
-Route::get('/admin/insert','AdminController@insertAdmin');
-Route::post('/admin/insert','AdminController@insertverify');
 
-Route::get('/admin/login','AdminController@login')->name('admin.login'); 
-Route::post('/admin/login','AdminloginController@adminLoginVerify')->name('admin.adminLoginVerify');
+Route::get('/admin','AdminController@login')->name('admin.login'); 
+Route::post('/admin','AdminloginController@adminLoginVerify')->name('admin.adminLoginVerify');
 
-Route::get('/admin','AdminController@index')->name('admin.index'); 
+Route::get('/admin/index','AdminController@index')->name('admin.index'); 
 Route::get('/logout','AdminController@logout')->name('admin.logout');
 Route::post('/searchschool','AdminController@searchSchool')->name('admin.searchSchool');
 
@@ -35,5 +33,15 @@ Route::get('/admin/schooledit/{id}','AdminController@editSchool')->name('admin.e
 Route::post('/admin/schooledit/{id}','AdminController@editSchoolAdd')->name('admin.editSchoolAdd');
 
 Route::get('admin/deleteSchool','AdminController@deleteSchool')->name('admin.deleteSchool');
+
+Route::get('/admin/userlist','AdminController@userlist')->name('admin.userlist');
+
+Route::get('/admin/insert','AdminController@insertAdmin')->name('admin.insertAdmin');
+Route::post('/admin/insert','AdminController@insertverify')->name('admin.insertverify');
+
+Route::get('/admin/updateform/{id}','AdminController@editAdmin')->name('admin.editAdmin');
+Route::post('/admin/updateform/{id}','AdminController@adminUpdate')->name('admin.adminUpdate');
+
+Route::get('/admin/deleteadmin','AdminController@deleteAdmin')->name('admin.deleteAdmin');
 
 

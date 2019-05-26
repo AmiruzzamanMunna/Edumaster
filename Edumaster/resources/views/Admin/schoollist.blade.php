@@ -4,6 +4,13 @@
 @endsection
 @section('container')
 <div id="content">
+	<div class="row">
+      	@if(session('message'))
+          <div class="alert alert-success col-3">
+            {{session('message')}}
+          </div>
+        @endif
+    </div>
 	<form action="{{route('admin.deleteSchool')}}" enctype="multipart/form-data" id="form-user">
     	{{csrf_field()}}
 	  	<div class="page-header">
@@ -79,12 +86,6 @@
       		</div>
       	</div>
     </form>
-    <div class="row">
-      	@if(session('message'))
-          <div class="alert alert-success col-5">
-            {{session('message')}}
-          </div>
-        @endif
-    </div>
+    
 </div>
 @endsection

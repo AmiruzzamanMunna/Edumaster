@@ -18,7 +18,7 @@ class AdminloginController extends Controller
     	if ($request->captchadata1+$request->captchadata2==$request->captchadata) {
     		$admin=Admin::where('username',$request->username)->first();
     		if($admin && Hash::check($request->password,$admin->password)){
-    			$request->session()->put('loggedAdmin',$admin->user_id);
+    			$request->session()->put('loggedAdmin',$admin->id);
        		 	$request->session()->flash('message','Login Successfull');
     			return redirect()->route('admin.index');
     		}else{

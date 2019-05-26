@@ -6,33 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Admin;
+use App\AdminGroup;
 use App\School;
 
 class AdminController extends Controller
 {
-	public function insertAdmin(Request $request)
-	{
-		return view('Admin.adminform');
-	}
-	public function insertverify(Request $request)
-	{
-		$admin = new Admin();
-		$admin->user_group_id=$request->user_group_id;
-		$admin->username=$request->username;
-		$admin->password=Hash::make($request->password);
-		// dd($admin);
-		$admin->salt=$request->salt;
-		$admin->firstname=$request->firstname;
-		$admin->lastname=$request->lastname;
-		$admin->email=$request->email;
-		$admin->image=$request->image;
-		$admin->code=$request->code;
-		$admin->ip=$request->ip;
-		$admin->status=$request->status;
-		$admin->date_added=$request->date_added;
-		$admin->save();
-		return back();
-	}
+	
 	public function login(Request $request)
 	{
 		$data1=rand(0,9);
@@ -43,7 +22,7 @@ class AdminController extends Controller
 	}
     public function index(Request $request)
     {
-    	$admin=Admin::where('user_id',$request->session()->get('loggedAdmin'))->get();
+    	$admin=Admin::where('id',$request->session()->get('loggedAdmin'))->get();
     	if ($admin) {
     		$schools=School::all();
     		return view('Admin.index')
@@ -61,7 +40,7 @@ class AdminController extends Controller
     }
     public function schoolList(Request $request)
     {
-    	$admin=Admin::where('user_id',$request->session()->get('loggedAdmin'));
+    	$admin=Admin::where('id',$request->session()->get('loggedAdmin'));
     	if ($admin) {
     		$schools=School::all();
     		$school_id=0;
@@ -147,7 +126,7 @@ class AdminController extends Controller
     }
     public function searchSchool(Request $request)
     {
-    	$admin=Admin::where('user_id',$request->session()->get('loggedAdmin'))->get();
+    	$admin=Admin::where('id',$request->session()->get('loggedAdmin'))->get();
     	$searchname=$request->searchname;
     	if ($admin) {
     		$schools=School::where('school_name','like','%'.$searchname.'%')->get();
@@ -156,5 +135,112 @@ class AdminController extends Controller
     	}else{
     		$request->session()->flash('message','You have given a Wrong School Name');
     	}
+    }
+    public function userlist(Request $request)
+    {
+    	$admin=$request->session()->get('loggedAdmin');
+    	if ($admin) {
+
+    		$admins=Admin::all();
+    		return view('Admin.adminuserlist')
+    				->with('admins',$admins);
+    		
+    	}else{
+    		$request->session()->flash('message','Sorry You Need to login First');
+    		return redirect()->route('admin.login');
+    	}
+    }
+    public function insertAdmin(Request $request)
+	{
+		$admin=$request->session()->get('loggedAdmin');
+		if ($admin) {
+
+			$admingroups=AdminGroup::all();
+			return view('Admin.admininsert')
+				->with('admingroups',$admingroups);
+		}
+		
+	}
+	public function insertverify(Request $request)
+	{
+		$request->validate([
+    		'username'=>'required',
+    		'user_group_id'=>'required',
+    		'firstname'=>'required',
+    		'lastname'=>'required',
+    		'email'=>'required',
+    		'password'=>'required',
+    		'confirm'=>'required|same:password',
+    		'status'=>'required',
+    	]);
+		$admin = new Admin();
+		$admin->username=$request->username;
+    	$admin->user_group_id=$request->user_group_id;
+    	$admin->firstname=$request->firstname;
+    	$admin->lastname=$request->lastname;
+    	$admin->email=$request->email;
+    	if ($request->hasFile('image')) {
+          $image = $request->file('image');
+          $filename = time() . 'admin-1.' . $image->getClientOriginalExtension();
+          $location = public_path('images/uploads');
+          $image->move($location, $filename);
+          // Image::make($image)->resize(800, 400)->save($location);
+          $admin->image = $filename;
+        }
+    	$admin->password=Hash::make($request->password);
+    	$admin->status=$request->status;
+    	$admin->save();
+    	$request->session()->flash('message','Admin Update Successfully');
+    	return redirect()->route('admin.userlist');
+
+	}
+    public function editAdmin(Request $request,$id)
+    {
+    	$admins=Admin::where('id',$id)->get();
+    	$admingroups=AdminGroup::all();
+    	return view('Admin.updateadminform')
+    			->with('admins',$admins)
+    			->with('admingroups',$admingroups);
+    }
+    public function adminUpdate(Request $request,$id)
+    {
+    	$request->validate([
+    		'username'=>'required',
+    		'user_group_id'=>'required',
+    		'firstname'=>'required',
+    		'lastname'=>'required',
+    		'email'=>'required',
+    		'password'=>'required',
+    		'confirm'=>'required|same:password',
+    		'status'=>'required',
+    	]);
+    	$admin=Admin::find($request->id);
+    	$admin->username=$request->username;
+    	$admin->user_group_id=$request->user_group_id;
+    	$admin->firstname=$request->firstname;
+    	$admin->lastname=$request->lastname;
+    	$admin->email=$request->email;
+    	if ($request->hasFile('image')) {
+          $image = $request->file('image');
+          $filename = time() . 'admin-1.' . $image->getClientOriginalExtension();
+          $location = public_path('images/uploads');
+          $image->move($location, $filename);
+          // Image::make($image)->resize(800, 400)->save($location);
+          $admin->image = $filename;
+        }
+    	$admin->password=Hash::make($request->password);
+    	$admin->status=$request->status;
+    	$admin->save();
+    	$request->session()->flash('message','Admin Update Successfully');
+    	return redirect()->route('admin.userlist');
+    }
+    public function deleteAdmin(Request $request)
+    {
+    	$deletes=$request->selected;
+    	foreach ($deletes as $delete) {
+    		Admin::where('id',$delete)->delete();
+    	}
+    	$request->session()->flash('message','Deleted Successfully');
+    	return redirect()->route('admin.userlist');
     }
 }

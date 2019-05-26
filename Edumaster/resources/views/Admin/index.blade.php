@@ -53,7 +53,9 @@
     @endforelse
   </div>  
   @if(session('message'))
-    {{session('message')}}
+    <div class="alert alert-success">
+      {{session('message')}}
+    </div>
   @endif
 </div>
 

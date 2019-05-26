@@ -94,13 +94,13 @@
             <a href="#collapse2-1" data-toggle="collapse" class="parent collapsed">Users</a>
             <ul id="collapse2-1" class="collapse">
               <li>
-                <a href="http://localhost:8080/edumaster/index.php?route=user/user&amp;user_token=pfcUl2bkbhkNG1D1DDoBnl9KGeBKN159">Users</a>
+                <a href="{{route('admin.userlist')}}">Users</a>
               </li>
               <li>
-                <a href="http://localhost:8080/edumaster/index.php?route=user/user_permission&amp;user_token=pfcUl2bkbhkNG1D1DDoBnl9KGeBKN159">User Groups</a>
+                <a href="">User Groups</a>
               </li>
               <li>
-                <a href="http://localhost:8080/edumaster/index.php?route=user/api&amp;user_token=pfcUl2bkbhkNG1D1DDoBnl9KGeBKN159">API</a>
+                <a href="">API</a>
               </li>
             </ul>
           </li>
@@ -132,7 +132,7 @@
     
 
 </div>
-<footer id="footer"><a href="http://www.onelimitedbd.com">ONE</a> &copy; 20019-2019 All Rights Reserved.<br />Version 1.0.1.1</footer></div>
+<footer id="footer"><a href="http://www.onelimitedbd.com">ONE</a> &copy; 2019-2029 All Rights Reserved.<br />Version 1.0.1.1</footer></div>
 </body>
 
 <script type="text/javascript"><!--
