@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use App\Admin;
 use App\AdminGroup;
 use App\School;
+use App\Feature;
+use App\Permission;
 
 class AdminController extends Controller
 {
@@ -214,7 +216,7 @@ class AdminController extends Controller
     		'confirm'=>'required|same:password',
     		'status'=>'required',
     	]);
-    	$admin=Admin::find($request->id);
+    	$admin=Admin::findorFail($request->id);
     	$admin->username=$request->username;
     	$admin->user_group_id=$request->user_group_id;
     	$admin->firstname=$request->firstname;
@@ -242,5 +244,57 @@ class AdminController extends Controller
     	}
     	$request->session()->flash('message','Deleted Successfully');
     	return redirect()->route('admin.userlist');
+    }
+    public function adminGroupList(Request $request)
+    {
+    	$admin=$request->session()->get('loggedAdmin');
+    	if ($admin) {
+    		$admingrouplist=AdminGroup::all();
+    		return view('Admin.admingroup')
+    				->with('admingrouplist',$admingrouplist);
+    	}else{
+    		$request->session()->flash('message','Sorry You Need to Login First');
+    		return redirect()->route('admin.login');
+    	}
+    }
+    public function permissionListedit(Request $request,$id)
+    {
+    	$admin=$request->session()->get('loggedAdmin');
+    	if ($admin) {
+
+    		$features=Feature::all();
+    		$permission=Permission::where('user_group_id',$id)->get();
+    		return view('Admin.adminpermission')
+    				->with('permission',$permission)
+    				->with('features',$features);
+    	}else{
+
+    		$request->session()->flash('message','Sorry You Need to Login First');
+    		return redirect()->route('admin.login');
+    	}
+    }
+    public function updatePermission(Request $request,$id)
+    {
+        $admin=$request->session()->get('loggedAdmin');
+        $selected=$request->selected;
+        $x=count($selected);
+        if ($selected) {
+            foreach ($selected as $select) {
+                // print_r($select);
+                for($i=0;$i<=$x;$i++){
+                    DB::table('oc_permission')->where('user_group_id',$request->id)->update([
+                    'user_group_id'=>$admin,
+                    'user_id'=>$admin,
+                    'feature_id'=>$select,
+                    'status'=>1,  
+                    ]);
+                }       
+            }
+        }else{
+           $request->session()->flash('message','Sorry You Did not Select anything');
+            return redirect()->route('admin.adminGroupList');
+        }
+        $request->session()->flash('message','Data Modified');
+        return redirect()->route('admin.adminGroupList');
     }
 }

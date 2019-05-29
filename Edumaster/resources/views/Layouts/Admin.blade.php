@@ -32,7 +32,7 @@
   <div class="container-fluid">
 
   
-    <div id="header-logo" class="navbar-header"><a href="" class="navbar-brand"><img src="{{asset('images')}}/Edumaster_resized.png" id="logoimage" alt="OpenCart" title="OpenCart" /></a></div>
+    <div id="header-logo" class="navbar-header"><a href="{{route('admin.index')}}" class="navbar-brand"><img src="{{asset('images')}}/Edumaster_resized.png" id="logoimage" alt="OpenCart" title="OpenCart" /></a></div>
     <a href="#" id="button-menu" class="hidden-md hidden-lg"><span class="fa fa-bars"></span></a>    
     
 
@@ -97,7 +97,7 @@
                 <a href="{{route('admin.userlist')}}">Users</a>
               </li>
               <li>
-                <a href="">User Groups</a>
+                <a href="{{route('admin.adminGroupList')}}">User Groups</a>
               </li>
               <li>
                 <a href="">API</a>

@@ -44,4 +44,9 @@ Route::post('/admin/updateform/{id}','AdminController@adminUpdate')->name('admin
 
 Route::get('/admin/deleteadmin','AdminController@deleteAdmin')->name('admin.deleteAdmin');
 
+Route::get('/admin/grouplist','AdminController@adminGroupList')->name('admin.adminGroupList');
+
+Route::get('/admin/permission/{id}','AdminController@permissionListedit')->name('admin.permissionListedit');
+Route::post('/admin/permission/{id}','AdminController@updatePermission')->name('admin.updatePermission');
+
 
